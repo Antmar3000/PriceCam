@@ -64,10 +64,12 @@ private fun filterHighestLine(result: Text): Double {
     for (block in result.textBlocks) {
         if (block.boundingBox != null) {
             for (line in block.lines) {
-                val lineHeight: Double = line.boundingBox!!.height().toDouble()
-                if (lineHeight > highestElement && line.text.matches(Regex("\\d+"))) {
-                    highestElement = lineHeight
-                    highestElementMatch = block.text.toDouble()
+                for (element in line.elements) {
+                    val lineHeight: Double = element.boundingBox!!.height().toDouble()
+                    if (lineHeight > highestElement && element.text.matches(Regex("\\d+"))) {
+                        highestElement = lineHeight
+                        highestElementMatch = element.text.toDouble()
+                    }
                 }
             }
         }
@@ -81,42 +83,47 @@ private fun identifyQuantity(result: Text): Double {
 
     var foundFirstMatch = false
     var weightOrVolumeMatch = "0"
-    var weightDigit = "0"
+    val weightDigit: String
 
     val regex1 = "\\d+([.,]\\d+)?[rpnl]".toRegex()
-    val regex2 = "\\d+([.,]\\d+)?[rpf]P".toRegex()
+    val regex2 = "\\d+([.,]\\d+)?[rpf][pP]".toRegex()
     val regex3 = "\\d+([.,]\\d+)?[LA]".toRegex()
     val regex4 = "\\d+[MAml]".toRegex()
 
 
     for (block in result.textBlocks) {
         if (block.boundingBox != null && !foundFirstMatch) {
-            when (block.text) {
-                in regex1 -> {
-                    weightOrVolumeMatch = regex1.find(block.text)?.value ?: "0"
-                    foundFirstMatch = true
-                    break
-                }
+            for (line in block.lines) {
+                for (element in line.elements) {
+                    when (element.text) {
+                        in regex1 -> {
+                            weightOrVolumeMatch = regex1.find(element.text)?.value ?: "0"
+                            foundFirstMatch = true
+                            break
+                        }
 
-                in regex2 -> {
-                    weightOrVolumeMatch = regex2.find(block.text)?.value ?: "0"
-                    foundFirstMatch = true
-                    break
-                }
+                        in regex2 -> {
+                            weightOrVolumeMatch = regex2.find(element.text)?.value ?: "0"
+                            foundFirstMatch = true
+                            break
+                        }
 
-                in regex3 -> {
-                    weightOrVolumeMatch = regex3.find(block.text)?.value ?: "0"
-                    foundFirstMatch = true
-                    break
-                }
+                        in regex3 -> {
+                            weightOrVolumeMatch = regex3.find(element.text)?.value ?: "0"
+                            foundFirstMatch = true
+                            break
+                        }
 
-                in regex4 -> {
-                    weightOrVolumeMatch = regex4.find(block.text)?.value ?: "0"
-                    foundFirstMatch = true
-                    break
+                        in regex4 -> {
+                            weightOrVolumeMatch = regex4.find(element.text)?.value ?: "0"
+                            foundFirstMatch = true
+                            break
+                        }
+                    }
                 }
             }
-        } else break
+        }
+
     }
 
 
@@ -125,7 +132,7 @@ private fun identifyQuantity(result: Text): Double {
         || weightOrVolumeMatch.endsWith("A")
     ) {
         weightDigit = weightOrVolumeMatch.replace("[nlA]".toRegex(), "").replace(",", ".")
-    } else  weightDigit = weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",",".")
+    } else weightDigit = weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
 
 
     return if (weightOrVolumeMatch.endsWith("n")
