@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -159,10 +160,13 @@ private fun identifyQuantity(result: Text): Double {
 
 private fun uniteResults(result: Text): Triple<Double, Double, Double> {
 
+    val roundedResult = (filterHighestLine(result).div(identifyQuantity(result))).toBigDecimal()
+        .setScale(2, RoundingMode.UP).toDouble()
+
     return Triple(
         filterHighestLine(result),
         identifyQuantity(result),
-        filterHighestLine(result).div(identifyQuantity(result))
+        roundedResult
     )
 }
 
