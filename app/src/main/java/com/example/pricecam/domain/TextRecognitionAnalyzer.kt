@@ -62,6 +62,7 @@ private fun filterHighestLine(result: Text): Double {
     var highestElement = 0.0
     var highestElementMatch = 0.0
 
+
     for (block in result.textBlocks) {
         if (block.boundingBox != null) {
             for (line in block.lines) {
@@ -92,81 +93,83 @@ private fun identifyQuantity(result: Text): Double {
     val regex5 = "\\d{3}".toRegex()
 
 
-    for (block in result.textBlocks) {
-        if (block.boundingBox != null && !foundFirstMatch) {
-            for (line in block.lines) {
-                for (element in line.elements) {
-                    when (element.text) {
-                        in regex1 -> {
-                            weightOrVolumeMatch =
-                                regex1.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                    ?: "0"
-                            foundFirstMatch = true
-                            break
-                        }
+    run loop@{
 
-                        in regex2 -> {
-                            weightOrVolumeMatch =
-                                regex2.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                    ?: "0"
-                            foundFirstMatch = true
-                            break
-                        }
+        result.textBlocks.forEach { block ->
+            if (block.boundingBox != null && !foundFirstMatch)
+                block.lines.forEach { line ->
+                    line.elements.forEach { element ->
+                        when (element.text) {
+                            in regex1 -> {
+                                weightOrVolumeMatch =
+                                    regex1.find(element.text)?.value?.filterNot { it.isWhitespace() }
+                                        ?: "0"
+                                foundFirstMatch = true
+                                return@loop
+                            }
 
-                        in regex3 -> {
-                            weightOrVolumeMatch =
-                                regex3.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                    ?: "0"
-                            foundFirstMatch = true
-                            break
-                        }
+                            in regex2 -> {
+                                weightOrVolumeMatch =
+                                    regex2.find(element.text)?.value?.filterNot { it.isWhitespace() }
+                                        ?: "0"
+                                foundFirstMatch = true
+                                return@loop
+                            }
 
-                        in regex4 -> {
-                            weightOrVolumeMatch =
-                                regex4.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                    ?: "0"
-                            foundFirstMatch = true
-                            break
-                        }
+                            in regex3 -> {
+                                weightOrVolumeMatch =
+                                    regex3.find(element.text)?.value?.filterNot { it.isWhitespace() }
+                                        ?: "0"
+                                foundFirstMatch = true
+                                return@loop
+                            }
 
-                        in regex5 -> {
-                            weightOrVolumeMatch =
-                                regex5.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                    ?: "0"
-                            foundFirstMatch = true
-                            break
+                            in regex4 -> {
+                                weightOrVolumeMatch =
+                                    regex4.find(element.text)?.value?.filterNot { it.isWhitespace() }
+                                        ?: "0"
+                                foundFirstMatch = true
+                                return@loop
+                            }
+
+                            in regex5 -> {
+                                weightOrVolumeMatch =
+                                    regex5.find(element.text)?.value?.filterNot { it.isWhitespace() }
+                                        ?: "0"
+                                foundFirstMatch = true
+                                return@loop
+                            }
                         }
                     }
                 }
-            }
         }
+    }
+
+
+        val weightDigit = if (weightOrVolumeMatch.endsWith("n")
+            || weightOrVolumeMatch.endsWith("L")
+            || weightOrVolumeMatch.endsWith("A")
+        ) weightOrVolumeMatch.replace("[nlA]".toRegex(), "").replace(",", ".")
+        else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
+
+        return if (weightOrVolumeMatch.endsWith("n")
+            || weightOrVolumeMatch.endsWith("L")
+            || weightOrVolumeMatch.endsWith("A")
+        ) {
+            weightDigit.toDouble()
+        } else weightDigit.toDouble().div(1000)
 
     }
 
-    val weightDigit = if (weightOrVolumeMatch.endsWith("n")
-        || weightOrVolumeMatch.endsWith("L")
-        || weightOrVolumeMatch.endsWith("A")
-    ) weightOrVolumeMatch.replace("[nlA]".toRegex(), "").replace(",", ".")
-    else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
+    private fun uniteResults(result: Text): Triple<Double, Double, Double> {
 
-    return if (weightOrVolumeMatch.endsWith("n")
-        || weightOrVolumeMatch.endsWith("L")
-        || weightOrVolumeMatch.endsWith("A")
-    ) {
-        weightDigit.toDouble()
-    } else weightDigit.toDouble().div(1000)
+        val roundedResult = (filterHighestLine(result).div(identifyQuantity(result))).toBigDecimal()
+            .setScale(2, RoundingMode.UP).toDouble()
 
-}
-
-private fun uniteResults(result: Text): Triple<Double, Double, Double> {
-
-    val roundedResult = (filterHighestLine(result).div(identifyQuantity(result))).toBigDecimal()
-        .setScale(2, RoundingMode.UP).toDouble()
-
-    return Triple(
-        filterHighestLine(result),
-        identifyQuantity(result),
-        roundedResult
-    )
-}
+        return Triple(
+            filterHighestLine(result),
+            identifyQuantity(result),
+            roundedResult
+        )
+    }
 
