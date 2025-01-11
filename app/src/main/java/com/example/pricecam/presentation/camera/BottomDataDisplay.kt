@@ -9,10 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import com.example.pricecam.R
+import com.example.pricecam.data.PriceTag
 
 @Composable
-fun BottomDataDisplay(detectedValue: Triple<Double, Double, Double>) {
+fun BottomDataDisplay(detectedValue: PriceTag) {
 
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -25,19 +28,19 @@ fun BottomDataDisplay(detectedValue: Triple<Double, Double, Double>) {
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             Text(
-                text = "${detectedValue.first}",
+                text = "${detectedValue.price}",
                 fontSize = 28.sp)
             Text(
                 text = "/",
                 fontSize = 28.sp)
             Text(
-                text = "${detectedValue.second}",
+                text = "${detectedValue.quantity}",
                 fontSize = 28.sp)
             Text(
                 text = "=",
                 fontSize = 28.sp)
             Text(
-                text = "${detectedValue.third}",
+                text = "${detectedValue.pricePerUnit}",
                 fontSize = 28.sp)
         }
 
@@ -47,19 +50,19 @@ fun BottomDataDisplay(detectedValue: Triple<Double, Double, Double>) {
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             Text(
-                text = "quantity",
+                text = stringResource(R.string.price),
                 fontSize = 14.sp)
             Text(
                 text = "",
                 fontSize = 14.sp)
             Text(
-                text = "price",
+                text = stringResource(R.string.quantity),
                 fontSize = 14.sp)
             Text(
                 text = "",
                 fontSize = 14.sp)
             Text(
-                text = "price/unit",
+                text = stringResource(R.string.price_per_unit),
                 fontSize = 14.sp)
 
         }

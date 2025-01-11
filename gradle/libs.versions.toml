@@ -38,6 +38,7 @@ google-mlkit = {group = "com.google.mlkit", name = "text-recognition", version.r
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistVersion"}
 
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

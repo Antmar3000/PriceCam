@@ -1,10 +1,12 @@
 package com.example.pricecam.domain
 
 import android.media.Image
+import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.example.pricecam.data.PriceTag
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
@@ -14,12 +16,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class TextRecognitionAnalyzer(
-    private val onDetectedTextUpdated: (Triple<Double, Double, Double>) -> Unit
+    private val onDetectedTextUpdated: (PriceTag) -> Unit
 ) : ImageAnalysis.Analyzer {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -62,11 +63,10 @@ private fun filterHighestLine(result: Text): Double {
     var highestElement = 0.0
     var highestElementMatch = 0.0
 
-
-    for (block in result.textBlocks) {
+    result.textBlocks.forEach { block ->
         if (block.boundingBox != null) {
-            for (line in block.lines) {
-                for (element in line.elements) {
+            block.lines.forEach { line ->
+                line.elements.forEach { element ->
                     val lineHeight: Double = element.boundingBox!!.height().toDouble()
                     if (lineHeight > highestElement && element.text.matches(Regex("\\d+"))) {
                         highestElement = lineHeight
@@ -76,6 +76,7 @@ private fun filterHighestLine(result: Text): Double {
             }
         }
     }
+
     return highestElementMatch
 }
 
@@ -86,9 +87,9 @@ private fun identifyQuantity(result: Text): Double {
     var foundFirstMatch = false
     var weightOrVolumeMatch = "0"
 
-    val regex1 = "\\d+([.,]\\d+)?[rpnl]".toRegex()
+    val regex1 = "\\d+([.,]\\d+)?[rp]".toRegex()
     val regex2 = "\\d+([.,]\\d+)?[rpf][pP]".toRegex()
-    val regex3 = "\\d+([.,]\\d+)?[LA]".toRegex()
+    val regex3 = "\\d+([.,]\\d+)?[nLA]".toRegex()
     val regex4 = "\\d+[MAml]".toRegex()
     val regex5 = "\\d{3}".toRegex()
 
@@ -145,31 +146,31 @@ private fun identifyQuantity(result: Text): Double {
         }
     }
 
+    val weightDigit = if (weightOrVolumeMatch.endsWith("n")
+        || weightOrVolumeMatch.endsWith("L")
+        || weightOrVolumeMatch.endsWith("A")
+    ) weightOrVolumeMatch.replace("[nLA]".toRegex(), "").replace(",", ".")
+    else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
 
-        val weightDigit = if (weightOrVolumeMatch.endsWith("n")
-            || weightOrVolumeMatch.endsWith("L")
-            || weightOrVolumeMatch.endsWith("A")
-        ) weightOrVolumeMatch.replace("[nlA]".toRegex(), "").replace(",", ".")
-        else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
+    Log.d("MyLog", weightDigit)
 
-        return if (weightOrVolumeMatch.endsWith("n")
-            || weightOrVolumeMatch.endsWith("L")
-            || weightOrVolumeMatch.endsWith("A")
-        ) {
-            weightDigit.toDouble()
-        } else weightDigit.toDouble().div(1000)
 
-    }
+    return if (weightOrVolumeMatch.endsWith("n")
+        || weightOrVolumeMatch.endsWith("L")
+        || weightOrVolumeMatch.endsWith("A")
+    ) {
+        weightDigit.toDouble()
+    } else weightDigit.toDouble().div(1000)
 
-    private fun uniteResults(result: Text): Triple<Double, Double, Double> {
+}
 
-        val roundedResult = (filterHighestLine(result).div(identifyQuantity(result))).toBigDecimal()
-            .setScale(2, RoundingMode.UP).toDouble()
+private fun uniteResults(result: Text): PriceTag {
 
-        return Triple(
-            filterHighestLine(result),
-            identifyQuantity(result),
-            roundedResult
-        )
-    }
+    return PriceTag(
+        filterHighestLine(result),
+        identifyQuantity(result),
+        filterHighestLine(result).div(identifyQuantity(result))
+    )
+}
+
 

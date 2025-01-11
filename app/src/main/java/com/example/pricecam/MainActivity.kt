@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.pricecam.presentation.MainScreen
+import com.example.pricecam.presentation.camera.KeepScreenOn
 import com.example.pricecam.ui.theme.PriceCamTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,6 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PriceCamTheme {
+                KeepScreenOn()
                 MainScreen()
             }
         }

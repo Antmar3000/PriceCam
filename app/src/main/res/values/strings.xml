@@ -2,4 +2,7 @@
     <string name="app_name">PriceCam</string>
     <string name="no_permission_text">This app needs camera access</string>
     <string name="button_permission">Grant permission</string>
+    <string name="price">price</string>
+    <string name="quantity">quantity</string>
+    <string name="price_per_unit">price/unit</string>
 </resources>
