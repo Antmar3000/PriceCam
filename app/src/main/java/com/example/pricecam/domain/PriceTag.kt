@@ -1,4 +1,4 @@
-package com.example.pricecam.data
+package com.example.pricecam.domain
 
 data class PriceTag (
     val price : Double,

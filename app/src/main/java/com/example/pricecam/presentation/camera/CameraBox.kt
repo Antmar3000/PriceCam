@@ -33,7 +33,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.pricecam.R
-import com.example.pricecam.data.PriceTag
+import com.example.pricecam.domain.PriceTag
 import com.example.pricecam.domain.TextRecognitionAnalyzer
 
 

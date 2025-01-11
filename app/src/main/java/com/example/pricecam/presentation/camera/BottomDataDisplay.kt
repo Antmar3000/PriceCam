@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.pricecam.R
-import com.example.pricecam.data.PriceTag
+import com.example.pricecam.domain.PriceTag
 
 @Composable
 fun BottomDataDisplay(detectedValue: PriceTag) {
