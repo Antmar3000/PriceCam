@@ -24,6 +24,6 @@ fun MainContent(
     hasPermission: Boolean,
     requestPermission: () -> Unit
 ) {
-    if (hasPermission) CameraBox() else NoPermissionScreen (requestPermission)
+    if (hasPermission) CameraBox() else NoPermissionScreen(requestPermission)
 
 }

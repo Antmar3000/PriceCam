@@ -1,7 +1,6 @@
 package com.example.pricecam.domain
 
 import android.media.Image
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -15,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -43,13 +43,11 @@ class TextRecognitionAnalyzer(
                     continuation.resume(Unit)
                 }
             }
-
             delay(TIMEOUT)
         }.invokeOnCompletion { exception ->
             exception?.printStackTrace()
             imageProxy.close()
         }
-
     }
 
     companion object {
@@ -57,19 +55,19 @@ class TextRecognitionAnalyzer(
     }
 }
 
-private fun filterHighestLine(result: Text): Double {
+private fun filterHighestLine(result: Text): Float {
 
     var highestElement = 0.0
-    var highestElementMatch = 0.0
+    var highestElementMatch = 0.0f
 
     result.textBlocks.forEach { block ->
         if (block.boundingBox != null) {
             block.lines.forEach { line ->
                 line.elements.forEach { element ->
                     val lineHeight: Double = element.boundingBox!!.height().toDouble()
-                    if (lineHeight > highestElement && element.text.matches(Regex("\\d+"))) {
+                    if (lineHeight > highestElement && element.text.matches(Regex("\\d{2,4}"))) {
                         highestElement = lineHeight
-                        highestElementMatch = element.text.toDouble()
+                        highestElementMatch = element.text.toFloat()
                     }
                 }
             }
@@ -81,7 +79,7 @@ private fun filterHighestLine(result: Text): Double {
 
 operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
 
-private fun identifyQuantity(result: Text): Double {
+private fun identifyQuantity(result: Text): Float {
 
     var foundFirstMatch = false
     var weightOrVolumeMatch = "0"
@@ -151,24 +149,25 @@ private fun identifyQuantity(result: Text): Double {
     ) weightOrVolumeMatch.replace("[nLA]".toRegex(), "").replace(",", ".")
     else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
 
-    Log.d("MyLog", weightDigit)
-
-
     return if (weightOrVolumeMatch.endsWith("n")
         || weightOrVolumeMatch.endsWith("L")
         || weightOrVolumeMatch.endsWith("A")
     ) {
-        weightDigit.toDouble()
-    } else weightDigit.toDouble().div(1000)
+        weightDigit.toFloat()
+    } else weightDigit.toFloat().div(1000)
 
 }
 
 private fun uniteResults(result: Text): PriceTag {
 
+    val roundedResult = with(filterHighestLine(result).div(identifyQuantity(result))) {
+        if (!this.isNaN()) this.toBigDecimal().setScale(2, RoundingMode.UP).toFloat() else 0.0f
+    }
+
     return PriceTag(
         filterHighestLine(result),
         identifyQuantity(result),
-        filterHighestLine(result).div(identifyQuantity(result))
+        roundedResult
     )
 }
 

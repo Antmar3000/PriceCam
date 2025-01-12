@@ -44,13 +44,13 @@ fun CameraBox() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
-    val detectedPriceQuantity = remember { mutableStateOf(PriceTag(0.0, 0.0, 0.0)) }
+    val detectedPriceQuantity = remember { mutableStateOf(PriceTag(0.0f, 0.0f, 0.0f)) }
 
     fun onTextUpdated(updatedData: PriceTag) {
         detectedPriceQuantity.value = updatedData
     }
 
-    fun torchController () {
+    fun torchController() {
         if (cameraController.cameraInfo != null) {
             if (cameraController.cameraInfo!!.hasFlashUnit()) {
                 when (cameraController.torchState.value) {
@@ -61,11 +61,14 @@ fun CameraBox() {
         }
     }
 
-
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues: PaddingValues ->
 
-        Box (modifier = Modifier.fillMaxSize().padding(paddingValues),
-            contentAlignment = Alignment.BottomCenter) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.BottomCenter
+        ) {
 
             Box(
                 modifier = Modifier
@@ -109,11 +112,9 @@ fun CameraBox() {
                         tint = androidx.compose.ui.graphics.Color.White
                     )
                 }
-
             }
 
             BottomDataDisplay(detectedPriceQuantity.value)
-
         }
 
     }
@@ -145,7 +146,6 @@ fun KeepScreenOn() {
         }
     }
 }
-
 
 
 

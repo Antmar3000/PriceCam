@@ -17,9 +17,10 @@ import com.example.pricecam.domain.PriceTag
 @Composable
 fun BottomDataDisplay(detectedValue: PriceTag) {
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .background(Color.White),
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White),
         verticalArrangement = Arrangement.SpaceAround
     ) {
         Row(
@@ -29,19 +30,24 @@ fun BottomDataDisplay(detectedValue: PriceTag) {
         ) {
             Text(
                 text = "${detectedValue.price}",
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
             Text(
                 text = "/",
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
             Text(
                 text = "${detectedValue.quantity}",
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
             Text(
                 text = "=",
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
             Text(
                 text = "${detectedValue.pricePerUnit}",
-                fontSize = 28.sp)
+                fontSize = 28.sp
+            )
         }
 
         Row(
@@ -51,19 +57,24 @@ fun BottomDataDisplay(detectedValue: PriceTag) {
         ) {
             Text(
                 text = stringResource(R.string.price),
-                fontSize = 14.sp)
+                fontSize = 14.sp
+            )
             Text(
                 text = "",
-                fontSize = 14.sp)
+                fontSize = 14.sp
+            )
             Text(
                 text = stringResource(R.string.quantity),
-                fontSize = 14.sp)
+                fontSize = 14.sp
+            )
             Text(
                 text = "",
-                fontSize = 14.sp)
+                fontSize = 14.sp
+            )
             Text(
                 text = stringResource(R.string.price_per_unit),
-                fontSize = 14.sp)
+                fontSize = 14.sp
+            )
 
         }
     }

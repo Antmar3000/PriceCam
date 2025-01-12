@@ -1,8 +1,8 @@
 package com.example.pricecam.domain
 
 data class PriceTag (
-    val price : Double,
-    val quantity : Double,
-    val pricePerUnit : Double
+    val price : Float,
+    val quantity : Float,
+    val pricePerUnit : Float
 )
 

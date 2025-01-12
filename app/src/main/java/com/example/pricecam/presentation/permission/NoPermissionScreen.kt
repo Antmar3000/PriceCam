@@ -23,16 +23,18 @@ fun NoPermissionScreen(
     requestPermission: () -> Unit
 ) {
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 16.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center) {
-            Text(text = stringResource(R.string.no_permission_text))
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = requestPermission) {
-                Icon(imageVector = Icons.Default.Settings, contentDescription = "camera_permission")
-                Text(text = stringResource(R.string.button_permission))
-            }
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(text = stringResource(R.string.no_permission_text))
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = requestPermission) {
+            Icon(imageVector = Icons.Default.Settings, contentDescription = "camera_permission")
+            Text(text = stringResource(R.string.button_permission))
+        }
     }
 }
