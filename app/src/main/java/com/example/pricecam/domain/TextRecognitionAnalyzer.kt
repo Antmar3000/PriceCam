@@ -78,6 +78,8 @@ private fun filterHighestLine(result: Text): Float {
 }
 
 operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
+private fun Regex.findAndFilter(text: CharSequence) =
+    find(text)?.value?.filterNot { it.isWhitespace() }
 
 private fun identifyQuantity(result: Text): Float {
 
@@ -99,41 +101,31 @@ private fun identifyQuantity(result: Text): Float {
                     line.elements.forEach { element ->
                         when (element.text) {
                             in regex1 -> {
-                                weightOrVolumeMatch =
-                                    regex1.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                        ?: "0"
+                                weightOrVolumeMatch = regex1.findAndFilter(element.text) ?: "0"
                                 foundFirstMatch = true
                                 return@loop
                             }
 
                             in regex2 -> {
-                                weightOrVolumeMatch =
-                                    regex2.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                        ?: "0"
+                                weightOrVolumeMatch = regex2.findAndFilter(element.text) ?: "0"
                                 foundFirstMatch = true
                                 return@loop
                             }
 
                             in regex3 -> {
-                                weightOrVolumeMatch =
-                                    regex3.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                        ?: "0"
+                                weightOrVolumeMatch = regex3.findAndFilter(element.text) ?: "0"
                                 foundFirstMatch = true
                                 return@loop
                             }
 
                             in regex4 -> {
-                                weightOrVolumeMatch =
-                                    regex4.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                        ?: "0"
+                                weightOrVolumeMatch = regex4.findAndFilter(element.text) ?: "0"
                                 foundFirstMatch = true
                                 return@loop
                             }
 
                             in regex5 -> {
-                                weightOrVolumeMatch =
-                                    regex5.find(element.text)?.value?.filterNot { it.isWhitespace() }
-                                        ?: "0"
+                                weightOrVolumeMatch = regex5.findAndFilter(element.text) ?: "0"
                                 foundFirstMatch = true
                                 return@loop
                             }
@@ -143,19 +135,16 @@ private fun identifyQuantity(result: Text): Float {
         }
     }
 
-    val weightDigit = if (weightOrVolumeMatch.endsWith("n")
-        || weightOrVolumeMatch.endsWith("L")
-        || weightOrVolumeMatch.endsWith("A")
-    ) weightOrVolumeMatch.replace("[nLA]".toRegex(), "").replace(",", ".")
-    else weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
+    val weightDigit = with(weightOrVolumeMatch) {
+        if (this.endsWith("n") || this.endsWith("L") || this.endsWith("A"))
+            this.replace("[nLA]".toRegex(), "").replace(",", ".")
+        else this.replace("\\D+".toRegex(), "").replace(",", ".")
+    }
 
-    return if (weightOrVolumeMatch.endsWith("n")
-        || weightOrVolumeMatch.endsWith("L")
-        || weightOrVolumeMatch.endsWith("A")
-    ) {
-        weightDigit.toFloat()
-    } else weightDigit.toFloat().div(1000)
-
+    return with(weightOrVolumeMatch) {
+        if (this.endsWith("n") || this.endsWith("L") || this.endsWith("A")) weightDigit.toFloat()
+        else weightDigit.toFloat().div(1000)
+    }
 }
 
 private fun uniteResults(result: Text): PriceTag {
