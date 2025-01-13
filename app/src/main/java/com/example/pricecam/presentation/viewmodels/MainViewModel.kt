@@ -4,24 +4,24 @@ import android.content.Context
 import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.example.pricecam.domain.AnalyzeResultUseCase
+import com.example.pricecam.domain.AnalyzeListener
 import com.example.pricecam.domain.PriceTag
 import com.example.pricecam.domain.TextRecognitionAnalyzer
-import com.google.mlkit.vision.text.Text
 
 class MainViewModel : ViewModel() {
 
+    val resultUseCase = AnalyzeResultUseCase()
+
     private val _detectedPriceQuantity = mutableStateOf(PriceTag(0.0f, 0.0f, 0.0f))
-    val detectedPriceQuantity = _detectedPriceQuantity
+    val detectedPriceQuantity : State<PriceTag> = _detectedPriceQuantity
 
-    fun onDetectedText (result : Text) {
-        _detectedPriceQuantity.value = AnalyzeResultUseCase(result).invoke()
-    }
-
+    private val interfaceImpl = AnalyzeListener {result -> _detectedPriceQuantity.value = resultUseCase(result) }
 
     fun startTextRecognition(
         context: Context,
@@ -32,12 +32,9 @@ class MainViewModel : ViewModel() {
         cameraController.imageAnalysisResolutionSelector = ResolutionSelector.Builder().build()
         cameraController.setImageAnalysisAnalyzer(
             ContextCompat.getMainExecutor(context),
-            TextRecognitionAnalyzer(this)
+            TextRecognitionAnalyzer(interfaceImpl)
         )
         cameraController.bindToLifecycle(lifecycleOwner)
         previewView.controller = cameraController
     }
-
-
-
 }

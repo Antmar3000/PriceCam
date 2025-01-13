@@ -1,15 +1,12 @@
 package com.example.pricecam.domain
 
-import androidx.core.util.toHalf
 import com.google.mlkit.vision.text.Text
 import java.math.RoundingMode
 
-class AnalyzeResultUseCase(
-    private val scannedText: Text
-) {
+class AnalyzeResultUseCase {
 
-    operator fun invoke() : PriceTag {
-        return uniteResults(scannedText)
+    operator fun invoke(result: Text) : PriceTag {
+        return uniteResults(result)
     }
 
     private fun filterHighestLine(result: Text): Float {

@@ -5,7 +5,6 @@ import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
-import com.example.pricecam.presentation.viewmodels.MainViewModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -17,13 +16,10 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class TextRecognitionAnalyzer(
-    private val viewModel: MainViewModel
-) : ImageAnalysis.Analyzer {
+class TextRecognitionAnalyzer (private val listener : AnalyzeListener) : ImageAnalysis.Analyzer {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
 
     @OptIn(ExperimentalGetImage::class)
     override fun analyze(imageProxy: ImageProxy) {
@@ -36,7 +32,7 @@ class TextRecognitionAnalyzer(
                 textRecognizer.process(inputImage).addOnSuccessListener { visionText ->
                     val detectedText = visionText.text
                     if (detectedText.isNotBlank()) {
-                        viewModel.onDetectedText(visionText)
+                        listener.onDetectedText(visionText)
                     }
                 }.addOnCompleteListener {
                     continuation.resume(Unit)
@@ -53,4 +49,5 @@ class TextRecognitionAnalyzer(
         const val TIMEOUT = 1500L
     }
 }
+
 

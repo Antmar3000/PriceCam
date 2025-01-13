@@ -1,4 +1,4 @@
-package com.example.pricecam.presentation.camera
+package com.example.pricecam.presentation.ui
 
 import android.annotation.SuppressLint
 import android.graphics.Color
