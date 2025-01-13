@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extension)
 
+    implementation(libs.androidx.viewmodel)
+
     implementation(libs.google.mlkit)
 
     implementation(libs.accompanist.permissions)

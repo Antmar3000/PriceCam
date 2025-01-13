@@ -11,6 +11,7 @@ composeBom = "2024.04.01"
 cameraxVersion = "1.4.1"
 accompanistVersion = "0.36.0"
 mlkitVersion = "16.0.1"
+viewModelVersion = "2.8.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,7 @@ androidx-camera = {group = "androidx.camera", name = "camera-camera2", version.r
 androidx-camera-lifecycle = {group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraxVersion"}
 androidx-camera-view = {group = "androidx.camera", name = "camera-view", version.ref = "cameraxVersion"}
 androidx-camera-extension = {group = "androidx.camera", name = "camera-extensions", version.ref = "cameraxVersion"}
+androidx-viewmodel = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewModelVersion"}
 
 google-mlkit = {group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitVersion"}
 

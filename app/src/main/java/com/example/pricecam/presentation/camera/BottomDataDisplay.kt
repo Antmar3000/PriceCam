@@ -12,10 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.pricecam.R
-import com.example.pricecam.domain.PriceTag
+import com.example.pricecam.presentation.viewmodels.MainViewModel
 
 @Composable
-fun BottomDataDisplay(detectedValue: PriceTag) {
+fun BottomDataDisplay(viewModel : MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
     Column(
         modifier = Modifier
@@ -29,7 +29,7 @@ fun BottomDataDisplay(detectedValue: PriceTag) {
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             Text(
-                text = "${detectedValue.price}",
+                text = "${viewModel.detectedPriceQuantity.value.price}",
                 fontSize = 28.sp
             )
             Text(
@@ -37,7 +37,7 @@ fun BottomDataDisplay(detectedValue: PriceTag) {
                 fontSize = 28.sp
             )
             Text(
-                text = "${detectedValue.quantity}",
+                text = "${viewModel.detectedPriceQuantity.value.quantity}",
                 fontSize = 28.sp
             )
             Text(
@@ -45,7 +45,7 @@ fun BottomDataDisplay(detectedValue: PriceTag) {
                 fontSize = 28.sp
             )
             Text(
-                text = "${detectedValue.pricePerUnit}",
+                text = "${viewModel.detectedPriceQuantity.value.pricePerUnit}",
                 fontSize = 28.sp
             )
         }

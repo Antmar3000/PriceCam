@@ -1,11 +1,9 @@
 package com.example.pricecam.presentation.camera
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
-import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
@@ -20,7 +18,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,26 +26,18 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.pricecam.R
-import com.example.pricecam.domain.PriceTag
-import com.example.pricecam.domain.TextRecognitionAnalyzer
+import com.example.pricecam.presentation.viewmodels.MainViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CameraBox() {
+fun CameraBox(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
-    val detectedPriceQuantity = remember { mutableStateOf(PriceTag(0.0f, 0.0f, 0.0f)) }
-
-    fun onTextUpdated(updatedData: PriceTag) {
-        detectedPriceQuantity.value = updatedData
-    }
 
     fun torchController() {
         if (cameraController.cameraInfo != null) {
@@ -85,12 +74,11 @@ fun CameraBox() {
                             setBackgroundColor(Color.BLACK)
                             scaleType = PreviewView.ScaleType.FILL_START
                         }.also { previewView ->
-                            startTextRecognition(
+                            viewModel.startTextRecognition(
                                 context = context,
                                 lifecycleOwner = lifecycleOwner,
                                 cameraController = cameraController,
-                                previewView = previewView,
-                                onDetectedTextUpdated = ::onTextUpdated
+                                previewView = previewView
                             )
                         }
                     })
@@ -114,26 +102,10 @@ fun CameraBox() {
                 }
             }
 
-            BottomDataDisplay(detectedPriceQuantity.value)
+            BottomDataDisplay()
         }
 
     }
-}
-
-private fun startTextRecognition(
-    context: Context,
-    lifecycleOwner: LifecycleOwner,
-    cameraController: LifecycleCameraController,
-    previewView: PreviewView,
-    onDetectedTextUpdated: (PriceTag) -> Unit
-) {
-    cameraController.imageAnalysisResolutionSelector = ResolutionSelector.Builder().build()
-    cameraController.setImageAnalysisAnalyzer(
-        ContextCompat.getMainExecutor(context),
-        TextRecognitionAnalyzer(onDetectedTextUpdated = onDetectedTextUpdated)
-    )
-    cameraController.bindToLifecycle(lifecycleOwner)
-    previewView.controller = cameraController
 }
 
 @Composable
