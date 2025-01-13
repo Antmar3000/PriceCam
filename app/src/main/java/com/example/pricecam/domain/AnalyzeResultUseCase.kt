@@ -1,5 +1,6 @@
 package com.example.pricecam.domain
 
+import androidx.core.util.toHalf
 import com.google.mlkit.vision.text.Text
 import java.math.RoundingMode
 
@@ -106,7 +107,7 @@ class AnalyzeResultUseCase(
     private fun uniteResults(result: Text): PriceTag {
 
         val roundedResult = with(filterHighestLine(result).div(identifyQuantity(result))) {
-            if (!this.isNaN()) this.toBigDecimal().setScale(2, RoundingMode.UP).toFloat() else 0.0f
+            if (!this.isNaN() && !this.isInfinite()) this.toBigDecimal().setScale(2, RoundingMode.UP).toFloat() else 0.0f
         }
 
         return PriceTag(
