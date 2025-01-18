@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class TextRecognitionAnalyzer (private val listener : AnalyzeListener) : ImageAnalysis.Analyzer {
+class TextRecognitionAnalyzer(private val listener: AnalyzeListener) : ImageAnalysis.Analyzer {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
@@ -46,7 +46,7 @@ class TextRecognitionAnalyzer (private val listener : AnalyzeListener) : ImageAn
     }
 
     companion object {
-        const val TIMEOUT = 1500L
+        const val TIMEOUT = 600L
     }
 }
 
