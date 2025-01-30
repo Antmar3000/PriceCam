@@ -75,8 +75,6 @@ fun BottomDataDisplay(viewModel : MainViewModel = androidx.lifecycle.viewmodel.c
                     text = stringResource(R.string.price_per_unit),
                     fontSize = 14.sp
                 )
-
             }
         }
-
-    }
+}

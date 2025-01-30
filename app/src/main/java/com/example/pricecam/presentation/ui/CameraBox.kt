@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout
+import androidx.camera.core.CameraSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
@@ -35,7 +36,10 @@ fun CameraBox(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.vi
 
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
-    val cameraController = remember { LifecycleCameraController(context) }
+    val cameraController = remember { LifecycleCameraController(context).apply {
+        bindToLifecycle(lifecycleOwner)
+        cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    } }
 
     fun torchController() {
         if (cameraController.cameraInfo != null) {
@@ -71,15 +75,11 @@ fun CameraBox(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.vi
                             layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                             setBackgroundColor(Color.BLACK)
                             scaleType = PreviewView.ScaleType.FILL_START
-                        }.also { previewView ->
-                            viewModel.startTextRecognition(
-                                context = context,
-                                lifecycleOwner = lifecycleOwner,
-                                cameraController = cameraController,
-                                previewView = previewView
-                            )
+                            viewModel.startTextRecognition(context, cameraController, this)
                         }
                     })
+
+                TextHighlightOverlay()
 
                 OutlinedButton(
                     onClick = { torchController() },
@@ -99,12 +99,12 @@ fun CameraBox(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.vi
                     )
                 }
             }
-            BottomDataDisplay()
+           BottomDataDisplay()
         }
 
-        TextHighlightOverlay()
     }
 }
+
 
 
 

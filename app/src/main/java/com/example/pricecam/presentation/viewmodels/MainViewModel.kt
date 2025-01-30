@@ -8,7 +8,6 @@ import androidx.camera.view.PreviewView
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.example.pricecam.domain.AnalyzeResultUseCase
 import com.example.pricecam.domain.AnalyzeListener
@@ -24,11 +23,10 @@ class MainViewModel : ViewModel() {
     val detectedPriceQuantity: State<PriceTag> = _detectedPriceQuantity
 
     private val interfaceImpl =
-        AnalyzeListener { result -> _detectedPriceQuantity.value = resultUseCase(result) }
+        AnalyzeListener { result -> _detectedPriceQuantity.value = resultUseCase(result)}
 
     fun startTextRecognition(
         context: Context,
-        lifecycleOwner: LifecycleOwner,
         cameraController: LifecycleCameraController,
         previewView: PreviewView
     ) {
@@ -36,9 +34,10 @@ class MainViewModel : ViewModel() {
             ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY).build()
         cameraController.setImageAnalysisAnalyzer(
             ContextCompat.getMainExecutor(context),
-            TextRecognitionAnalyzer(interfaceImpl)
+            TextRecognitionAnalyzer(interfaceImpl, previewView)
         )
-        cameraController.bindToLifecycle(lifecycleOwner)
         previewView.controller = cameraController
+
     }
+
 }

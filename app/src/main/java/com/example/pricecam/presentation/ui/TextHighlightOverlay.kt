@@ -16,7 +16,8 @@ fun TextHighlightOverlay (viewModel: MainViewModel = androidx.lifecycle.viewmode
         Canvas(modifier = Modifier.fillMaxSize()) {
             viewModel.detectedPriceQuantity.value.priceBoundingBox.apply {
                 if (this != null) {
-                    drawRect(color = Color.Blue,
+                    drawRect(
+                        color = Color.Blue,
                         topLeft = this.toComposeRect().topLeft,
                         size = this.toComposeRect().size,
                         style = Stroke(width = 3.dp.toPx())
@@ -28,7 +29,8 @@ fun TextHighlightOverlay (viewModel: MainViewModel = androidx.lifecycle.viewmode
         Canvas(modifier = Modifier.fillMaxSize()) {
             viewModel.detectedPriceQuantity.value.quantityBoundingBox.apply {
                 if (this != null) {
-                    drawRect(color = Color.Red,
+                    drawRect(
+                        color = Color.Red,
                         topLeft = this.toComposeRect().topLeft,
                         size = this.toComposeRect().size,
                         style = Stroke(width = 3.dp.toPx())
