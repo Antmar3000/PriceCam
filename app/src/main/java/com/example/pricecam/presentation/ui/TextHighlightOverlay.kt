@@ -25,7 +25,6 @@ fun TextHighlightOverlay (viewModel: MainViewModel = androidx.lifecycle.viewmode
                 }
             }
         }
-
         Canvas(modifier = Modifier.fillMaxSize()) {
             viewModel.detectedPriceQuantity.value.quantityBoundingBox.apply {
                 if (this != null) {

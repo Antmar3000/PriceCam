@@ -37,7 +37,6 @@ class MainViewModel : ViewModel() {
             TextRecognitionAnalyzer(interfaceImpl, previewView)
         )
         previewView.controller = cameraController
-
     }
 
 }

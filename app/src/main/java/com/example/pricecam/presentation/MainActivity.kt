@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.pricecam.presentation.ui.KeepScreenOn
-import com.example.pricecam.ui.theme.PriceCamTheme
+import com.example.pricecam.presentation.ui.theme.PriceCamTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
