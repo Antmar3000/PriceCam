@@ -1,6 +1,5 @@
 package com.example.pricecam.domain
 
-import android.graphics.Matrix
 import android.graphics.Rect
 import android.media.Image
 import androidx.annotation.OptIn
@@ -55,51 +54,8 @@ class TextRecognitionAnalyzer(
         }
     }
 
-    private fun getCorrectionMatrix(imageProxy: ImageProxy, previewView: PreviewView): Matrix {
-
-        val cropRect = imageProxy.cropRect
-        val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-        val matrix = Matrix()
-
-        val sourceArray = floatArrayOf(
-            cropRect.left.toFloat(),
-            cropRect.top.toFloat(),
-            cropRect.right.toFloat(),
-            cropRect.top.toFloat(),
-            cropRect.right.toFloat(),
-            cropRect.bottom.toFloat(),
-            cropRect.left.toFloat(),
-            cropRect.bottom.toFloat()
-        )
-
-        val destinationArray = floatArrayOf(
-            0f,
-            0f,
-            previewView.width.toFloat(),
-            0f,
-            previewView.width.toFloat(),
-            previewView.height.toFloat(),
-            0f,
-            previewView.height.toFloat()
-        )
-
-        val vertexSize = 2
-
-        val shiftOffset = rotationDegrees / 90 * vertexSize
-
-        val tempArray = destinationArray.clone()
-        for (toIndex in sourceArray.indices) {
-            val fromIndex = (toIndex + shiftOffset) % sourceArray.size
-            destinationArray[toIndex] = tempArray[fromIndex]
-        }
-
-        matrix.setPolyToPoly(sourceArray, 0, destinationArray, 0, 4)
-
-        return matrix
-    }
-
     companion object {
-        const val TIMEOUT = 600L
+        const val TIMEOUT = 1200L
     }
 }
 

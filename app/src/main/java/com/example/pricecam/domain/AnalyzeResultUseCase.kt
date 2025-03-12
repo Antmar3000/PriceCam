@@ -9,11 +9,10 @@ class AnalyzeResultUseCase {
         return uniteResults(result)
     }
 
-    private fun filterHighestLine(result: Text): PriceInfo {
+    private fun filterHighestLine(result: Text): Float {
 
         var highestElement = 0.0
         var highestElementMatch = 0.0f
-        var boundingBox: android.graphics.Rect? = null
 
         result.textBlocks.forEach { block ->
             if (block.boundingBox != null) {
@@ -24,30 +23,29 @@ class AnalyzeResultUseCase {
                             highestElement =
                                 lineHeight
                             highestElementMatch = element.text.toFloat()
-                            boundingBox = element.boundingBox
                         }
                     }
                 }
             }
         }
 
-        return PriceInfo(highestElementMatch, boundingBox)
+        return highestElementMatch
     }
 
     operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
 
-    private fun identifyQuantity(result: Text): QuantityInfo {
+    private fun identifyQuantity(result: Text): Float {
 
         var foundFirstMatch = false
         var weightOrVolumeMatch = "0"
-        var boundingBox: android.graphics.Rect? = null
         var matchWithKilos = false
 
-        val regex1 = "\\d+([.,]\\d+)?[rp]".toRegex()
-        val regex2 = "\\d+([.,]\\d+)?[rpf][pP]".toRegex()
-        val regex3 = "\\d+([.,]\\d+)?[nLA]".toRegex()
-        val regex4 = "\\d+[Mm][Aln]".toRegex()
-        val regex5 = "\\d+K[gr]".toRegex()
+        val regex1 = "\\d+[rpT]".toRegex()
+        val regex2 = "\\d+[rpfT][pP]".toRegex()
+        val regex3 = "\\d+([.,]\\d+)?[nLAN]".toRegex()
+        val regex4 = "\\d+[Mm][AlnN]".toRegex()
+        val regex5 = "\\d+([.,]\\d+)?[Kk][grT]".toRegex()
+        val regex6 = "\\d+[M/I]".toRegex()
 
 
         run loop@{
@@ -61,14 +59,12 @@ class AnalyzeResultUseCase {
                                 in regex1 -> {
                                     weightOrVolumeMatch = regex1.find(element.text)?.value ?: "0"
                                     foundFirstMatch = true
-                                    boundingBox = element.boundingBox
                                     return@loop
                                 }
 
                                 in regex2 -> {
                                     weightOrVolumeMatch = regex2.find(element.text)?.value ?: "0"
                                     foundFirstMatch = true
-                                    boundingBox = element.boundingBox
                                     return@loop
                                 }
 
@@ -76,14 +72,12 @@ class AnalyzeResultUseCase {
                                     weightOrVolumeMatch = regex3.find(element.text)?.value ?: "0"
                                     foundFirstMatch = true
                                     matchWithKilos = true
-                                    boundingBox = element.boundingBox
                                     return@loop
                                 }
 
                                 in regex4 -> {
                                     weightOrVolumeMatch = regex4.find(element.text)?.value ?: "0"
                                     foundFirstMatch = true
-                                    boundingBox = element.boundingBox
                                     return@loop
                                 }
 
@@ -91,7 +85,12 @@ class AnalyzeResultUseCase {
                                     weightOrVolumeMatch = regex5.find(element.text)?.value ?: "0"
                                     foundFirstMatch = true
                                     matchWithKilos = true
-                                    boundingBox = element.boundingBox
+                                    return@loop
+                                }
+
+                                in regex6 -> {
+                                    weightOrVolumeMatch = regex6.find(element.text)?.value ?: "0"
+                                    foundFirstMatch = true
                                     return@loop
                                 }
                             }
@@ -103,27 +102,24 @@ class AnalyzeResultUseCase {
         val weightOrVolumeDigits =
             weightOrVolumeMatch.replace("\\D+".toRegex(), "").replace(",", ".")
 
-        return QuantityInfo(
-            if (matchWithKilos) weightOrVolumeDigits.toFloat() else weightOrVolumeDigits.toFloat().div(1000),
-            boundingBox
-        )
+        return if (matchWithKilos) weightOrVolumeDigits.toFloat()
+            else weightOrVolumeDigits.toFloat().div(1000)
     }
 
     private fun uniteResults(result: Text): PriceTag {
 
         val roundedResult =
-            with(filterHighestLine(result).priceMatch.div(identifyQuantity(result).quantityMatch)) {
+            with(filterHighestLine(result).div(identifyQuantity(result))) {
                 if (!this.isNaN() && !this.isInfinite())
                     this.toBigDecimal().setScale(2, RoundingMode.UP).toFloat()
                 else 0.0f
             }
 
         return PriceTag(
-            filterHighestLine(result).priceMatch,
-            identifyQuantity(result).quantityMatch,
+            filterHighestLine(result),
+            identifyQuantity(result),
             roundedResult,
-            filterHighestLine(result).priceBoundingBox,
-            identifyQuantity(result).quantityBoundingBox
+            result.text
         )
     }
 }
