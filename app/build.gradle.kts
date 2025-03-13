@@ -20,6 +20,18 @@ android {
         }
     }
 
+    flavorDimensions += "test_status"
+    productFlavors {
+        create("text") {
+            applicationIdSuffix = ".test"
+            dimension = "test_status"
+        }
+        create("master") {
+            applicationIdSuffix = ".master"
+            dimension = "test_status"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
