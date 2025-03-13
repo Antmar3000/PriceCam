@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,9 +32,14 @@ import com.example.pricecam.presentation.viewmodels.MainViewModel
 fun PortraitCameraBox(
     viewModel: MainViewModel,
     cameraController: LifecycleCameraController,
-    torchController: () -> Unit,
-    torchState: Boolean
+    torchController: () -> Unit
 ) {
+
+    val torchState = viewModel.torchState.collectAsState().value
+
+    SideEffect {
+        cameraController.enableTorch(torchState)
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues: PaddingValues ->
         Box(
@@ -63,7 +70,9 @@ fun PortraitCameraBox(
                     onClick = { torchController() },
                     shape = CircleShape,
                     border = BorderStroke(1.dp, androidx.compose.ui.graphics.Color.Black),
-                    modifier = Modifier.padding(paddingValues).size(90.dp),
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .size(90.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = androidx.compose.ui.graphics.Color.DarkGray.copy(alpha = 0.5f)
                     )

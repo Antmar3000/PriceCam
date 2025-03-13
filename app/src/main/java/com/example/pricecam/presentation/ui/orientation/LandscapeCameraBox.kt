@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -30,9 +32,14 @@ import com.example.pricecam.presentation.viewmodels.MainViewModel
 fun LandscapeCameraBox(
     viewModel: MainViewModel,
     cameraController: LifecycleCameraController,
-    torchController: () -> Unit,
-    torchState: Boolean
+    torchController: () -> Unit
 ) {
+
+    val torchState = viewModel.torchState.collectAsState().value
+
+    SideEffect {
+        cameraController.enableTorch(torchState)
+    }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues: PaddingValues ->
         Box(

@@ -4,10 +4,8 @@ import android.content.res.Configuration
 import androidx.camera.core.CameraSelector
 import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -26,21 +24,22 @@ fun CameraScreen(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose
             cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
         }
     }
-    var torchState by remember { mutableStateOf(false) }
     val orientation = LocalConfiguration.current.orientation
+
+    val torchState = viewModel.torchState.collectAsState().value
 
     fun torchController() {
         if (cameraController.cameraInfo != null) {
             if (cameraController.cameraInfo!!.hasFlashUnit()) {
                 when (cameraController.torchState.value) {
                     0 -> {
-                        cameraController.enableTorch(true)
-                        torchState = true
+                        viewModel.torchState.value = true
+                        cameraController.enableTorch(torchState)
                     }
 
                     1 -> {
-                        cameraController.enableTorch(false)
-                        torchState = false
+                        viewModel.torchState.value = false
+                        cameraController.enableTorch(torchState)
                     }
                 }
             }
@@ -48,9 +47,9 @@ fun CameraScreen(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose
     }
 
     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-        PortraitCameraBox(viewModel, cameraController, ::torchController, torchState)
+        PortraitCameraBox(viewModel, cameraController, ::torchController)
     } else {
-        LandscapeCameraBox(viewModel, cameraController, ::torchController, torchState)
+        LandscapeCameraBox(viewModel, cameraController, ::torchController)
     }
 }
 

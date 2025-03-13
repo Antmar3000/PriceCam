@@ -19,18 +19,22 @@ class MainViewModel : ViewModel() {
     val resultUseCase = AnalyzeResultUseCase()
 
     private val _priceQuantityResult = MutableStateFlow(PriceTag(0.0f, 0.0f, 0.0f, ""))
-    val priceQuantityResult : StateFlow<PriceTag> get() = _priceQuantityResult
+    val priceQuantityResult: StateFlow<PriceTag> get() = _priceQuantityResult
+
+    val torchState = MutableStateFlow(false)
 
     private val interfaceImpl =
-        AnalyzeListener { result -> _priceQuantityResult.value = resultUseCase(result)}
+        AnalyzeListener { result -> _priceQuantityResult.value = resultUseCase(result) }
 
     fun startTextRecognition(
         context: Context,
         cameraController: LifecycleCameraController,
         previewView: PreviewView
     ) {
-        cameraController.imageAnalysisResolutionSelector = ResolutionSelector.Builder().setResolutionStrategy(
-            ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY).build()
+        cameraController.imageAnalysisResolutionSelector =
+            ResolutionSelector.Builder().setResolutionStrategy(
+                ResolutionStrategy.HIGHEST_AVAILABLE_STRATEGY
+            ).build()
         cameraController.setImageAnalysisAnalyzer(
             ContextCompat.getMainExecutor(context),
             TextRecognitionAnalyzer(interfaceImpl, previewView)
