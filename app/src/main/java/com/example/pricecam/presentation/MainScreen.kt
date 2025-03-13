@@ -1,7 +1,7 @@
 package com.example.pricecam.presentation
 
 import androidx.compose.runtime.Composable
-import com.example.pricecam.presentation.ui.CameraBox
+import com.example.pricecam.presentation.ui.CameraScreen
 import com.example.pricecam.presentation.permission.NoPermissionScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -24,6 +24,6 @@ fun MainContent(
     hasPermission: Boolean,
     requestPermission: () -> Unit
 ) {
-    if (hasPermission) CameraBox() else NoPermissionScreen(requestPermission)
+    if (hasPermission) CameraScreen() else NoPermissionScreen(requestPermission)
 
 }

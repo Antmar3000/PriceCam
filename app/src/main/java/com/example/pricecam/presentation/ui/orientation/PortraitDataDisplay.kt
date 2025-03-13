@@ -1,4 +1,4 @@
-package com.example.pricecam.presentation.ui
+package com.example.pricecam.presentation.ui.orientation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import com.example.pricecam.R
 import com.example.pricecam.presentation.viewmodels.MainViewModel
 
 @Composable
-fun BottomDataDisplay(viewModel: MainViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun PortraitDataDisplay(viewModel: MainViewModel) {
 
     val priceQuantityInfo = viewModel.priceQuantityResult.collectAsState().value
 

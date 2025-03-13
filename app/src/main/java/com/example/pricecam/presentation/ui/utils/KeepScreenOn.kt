@@ -1,4 +1,4 @@
-package com.example.pricecam.presentation.ui
+package com.example.pricecam.presentation.ui.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
