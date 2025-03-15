@@ -1,4 +1,4 @@
-package com.example.pricecam.presentation.ui.orientation
+package com.antmar.pricecam.presentation.ui.orientation
 
 import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.pricecam.R
-import com.example.pricecam.presentation.ui.utils.CameraPreviewRectangle
-import com.example.pricecam.presentation.viewmodels.MainViewModel
+import com.antmar.pricecam.R
+import com.antmar.pricecam.presentation.ui.utils.CameraPreviewRectangle
+import com.antmar.pricecam.presentation.viewmodels.MainViewModel
 
 @Composable
 fun PortraitCameraBox(
