@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pricecam"
+    namespace = "com.antmar.pricecam"
     compileSdk = 34
 
     defaultConfig {
