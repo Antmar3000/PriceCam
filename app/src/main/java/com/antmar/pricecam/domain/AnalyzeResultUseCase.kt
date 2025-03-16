@@ -42,11 +42,12 @@ class AnalyzeResultUseCase {
 
         val regex1 = "\\d+\\s*[rfT]([.,])?\\b".toRegex()
         val regex2 = "\\d+\\s*[Trf][pP]([.,])?\\b".toRegex()
-        val regex3 = "\\d{1,2}([.,]\\d+)?\\s*[nLAN]([.,])?\\b".toRegex()
-        val regex4 = "\\d+\\s*[Mm][AlnNI]([.,])?\\b".toRegex()
-        val regex5 = "\\d+([.,]\\d+)?\\s*[Kk][grT]([.,])?".toRegex()
+        val regex3 = "\\b\\d{1,2}([.,]\\d+)?\\s*[nLANl]([.,])?\\b".toRegex()
+        val regex4 = "\\d+\\s*[Mm][AlnNI]([.,])?".toRegex()
+        val regex5 = "\\d{1,2}([.,]\\d+)?\\s*[Kk][grT]([.,])?".toRegex()
         val regex6 = "\\d+\\s*[mM](/I|JI|JN)([.,])?".toRegex()
-        val regex7 = "\\d+([.,]\\d+)?\\s*(/I|JI|JN)([.,])?".toRegex()
+        val regex7 = "\\d{1,2}([.,]\\d+)?\\s*(/I|JI|JN)([.,])?".toRegex()
+        val regex8 = "\\d{1,2}([.,]\\d+)?\\s*[nLANl]([.,])?".toRegex()
 
 
         run loop@{
@@ -95,6 +96,13 @@ class AnalyzeResultUseCase {
 
                             in regex7 -> {
                                 weightOrVolumeMatch = regex7.find(line.text)?.value ?: "0"
+                                foundFirstMatch = true
+                                matchWithKilos = true
+                                return@loop
+                            }
+
+                            in regex8 -> {
+                                weightOrVolumeMatch = regex8.find(line.text)?.value ?: "0"
                                 foundFirstMatch = true
                                 matchWithKilos = true
                                 return@loop

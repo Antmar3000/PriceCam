@@ -8,7 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.pricecam"
+        applicationId = "com.antmar.pricecam"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

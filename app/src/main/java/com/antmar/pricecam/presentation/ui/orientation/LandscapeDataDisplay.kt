@@ -23,7 +23,7 @@ fun LandscapeDataDisplay(viewModel: MainViewModel) {
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .width(90.dp)
+            .width(120.dp)
             .background(MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
