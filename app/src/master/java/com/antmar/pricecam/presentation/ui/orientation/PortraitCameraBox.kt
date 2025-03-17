@@ -85,7 +85,8 @@ fun PortraitCameraBox(
                 }
             }
 
-            PortraitDataDisplay(viewModel)
+//            PortraitDataDisplay(viewModel)
+            PortraitDataDisplayNew(viewModel)
 
 //            PreviewScannedText()
         }

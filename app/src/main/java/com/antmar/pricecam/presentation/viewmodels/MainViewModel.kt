@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.antmar.pricecam.domain.AnalyzeResultUseCase
 import com.antmar.pricecam.domain.AnalyzeListener
 import com.antmar.pricecam.domain.PriceTag
+import com.antmar.pricecam.domain.QuantityInfo
 import com.antmar.pricecam.domain.TextRecognitionAnalyzer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,7 @@ class MainViewModel : ViewModel() {
 
     val resultUseCase = AnalyzeResultUseCase()
 
-    private val _priceQuantityResult = MutableStateFlow(PriceTag(0.0f, 0.0f, 0.0f, ""))
+    private val _priceQuantityResult = MutableStateFlow(PriceTag(0.0f, QuantityInfo(0.0f, 0),0.0f, ""))
     val priceQuantityResult: StateFlow<PriceTag> get() = _priceQuantityResult
 
     val torchState = MutableStateFlow(false)

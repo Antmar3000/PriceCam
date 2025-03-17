@@ -15,14 +15,16 @@ private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    background = NearlyBlack
+    background = NearlyBlack,
+    surface = DarkOrange
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
-    background = Color.White
+    background = Color.White,
+    surface = LightOrange
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -39,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
 fun PriceCamTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
