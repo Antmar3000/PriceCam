@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PriceCam</string>
+    <string name="no_permission_text">Приложению нужен доступ к камере</string>
+    <string name="button_permission">Дать разрешение</string>
+    <string name="price">цена</string>
+    <string name="quantity">кол-во</string>
+    <string name="price_per_unit">цена за единицу</string>
+    <string name="kg">кг</string>
+    <string name="liter">л</string>
+</resources>

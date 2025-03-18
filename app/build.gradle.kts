@@ -4,19 +4,31 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pricecam"
+    namespace = "com.antmar.pricecam"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.pricecam"
+        applicationId = "com.antmar.pricecam"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+    }
+
+    flavorDimensions += "test_status"
+    productFlavors {
+        create("text") {
+            applicationIdSuffix = ".test"
+            dimension = "test_status"
+        }
+        create("master") {
+            applicationIdSuffix = ".master"
+            dimension = "test_status"
         }
     }
 
@@ -71,6 +83,8 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extension)
+
+    implementation(libs.androidx.viewmodel)
 
     implementation(libs.google.mlkit)
 
