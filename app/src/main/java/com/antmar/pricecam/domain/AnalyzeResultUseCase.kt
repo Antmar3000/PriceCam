@@ -1,5 +1,7 @@
 package com.antmar.pricecam.domain
 
+import com.antmar.pricecam.domain.entity.PriceTag
+import com.antmar.pricecam.domain.entity.QuantityInfo
 import com.google.mlkit.vision.text.Text
 import java.math.RoundingMode
 
@@ -45,9 +47,15 @@ class AnalyzeResultUseCase {
         2 = liter
         3 = milliliter
         4 = kilogram
-
          */
         var suffix = 0
+
+        fun findRegex (regex : Regex, text: CharSequence, suff : Int, kilos : Boolean) {
+            weightOrVolumeMatch = regex.find(text)?.value ?: "0"
+            foundFirstMatch = true
+            suffix = suff
+            matchWithKilos = kilos
+        }
 
         val regex1 = "\\d+\\s*[rfT]([.,])?\\b".toRegex()
         val regex2 = "\\d+\\s*[Trf][pP]([.,])?\\b".toRegex()
@@ -67,70 +75,47 @@ class AnalyzeResultUseCase {
                     block.lines.forEach { line ->
                         when (line.text) {
                             in regex1 -> {
-                                weightOrVolumeMatch = regex1.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                suffix = 1
+                                findRegex(regex1, line.text, 1, false)
                                 return@loop
                             }
 
                             in regex2 -> {
-                                weightOrVolumeMatch = regex2.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                suffix = 1
+                                findRegex(regex2, line.text, 1, false)
                                 return@loop
                             }
 
                             in regex3 -> {
-                                weightOrVolumeMatch = regex3.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                matchWithKilos = true
-                                suffix = 2
+                                findRegex(regex3, line.text, 2, true)
                                 return@loop
                             }
 
                             in regex4 -> {
-                                weightOrVolumeMatch = regex4.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                suffix = 3
+                                findRegex(regex4, line.text, 3, false)
                                 return@loop
                             }
 
                             in regex5 -> {
-                                weightOrVolumeMatch = regex5.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                matchWithKilos = true
-                                suffix = 4
+                                findRegex(regex5, line.text, 4, true)
                                 return@loop
                             }
 
                             in regex6 -> {
-                                weightOrVolumeMatch = regex6.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                suffix = 3
+                                findRegex(regex6, line.text, 3, false)
                                 return@loop
                             }
 
                             in regex7 -> {
-                                weightOrVolumeMatch = regex7.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                matchWithKilos = true
-                                suffix = 2
+                                findRegex(regex7, line.text, 2, true)
                                 return@loop
                             }
 
                             in regex8 -> {
-                                weightOrVolumeMatch = regex8.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                matchWithKilos = true
-                                suffix = 2
+                                findRegex(regex8, line.text, 2, true)
                                 return@loop
                             }
 
                             in regex9 -> {
-                                weightOrVolumeMatch = regex9.find(line.text)?.value ?: "0"
-                                foundFirstMatch = true
-                                matchWithKilos = true
-                                suffix = 2
+                                findRegex(regex9, line.text, 2, true)
                                 return@loop
                             }
                         }

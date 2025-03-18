@@ -1,4 +1,4 @@
-package com.antmar.pricecam.domain
+package com.antmar.pricecam.domain.entity
 
 
 data class PriceTag (

@@ -6,9 +6,12 @@ import android.widget.LinearLayout
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -24,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.antmar.pricecam.R
 import com.antmar.pricecam.presentation.ui.utils.CameraPreviewRectangle
 import com.antmar.pricecam.presentation.viewmodels.MainViewModel
@@ -85,9 +90,20 @@ fun PortraitCameraBox(
                 }
             }
 
-//            PortraitDataDisplay(viewModel)
+            PreviewText(viewModel)
 
-            PreviewScannedText()
         }
+    }
+}
+
+@Composable
+fun PreviewText (viewModel: MainViewModel) {
+
+    val text = viewModel.priceQuantityResult.collectAsStateWithLifecycle().value.text
+
+    Column (modifier = Modifier
+        .fillMaxWidth()
+        .background(androidx.compose.ui.graphics.Color.White)) {
+        Text(text = text)
     }
 }

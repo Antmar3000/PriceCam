@@ -19,7 +19,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class TextRecognitionAnalyzer(
-    private val listener: AnalyzeListener,
+    private val analyzeListener: AnalyzeListener,
     private val previewView: PreviewView
 ) : ImageAnalysis.Analyzer {
 
@@ -41,7 +41,7 @@ class TextRecognitionAnalyzer(
                 textRecognizer.process(inputImage).addOnSuccessListener { visionText ->
                     val detectedText = visionText.text
                     if (detectedText.isNotBlank()) {
-                        listener.onDetectedText(visionText)
+                        analyzeListener.onDetectedText(visionText)
                     }
                 }.addOnCompleteListener {
                     continuation.resume(Unit)

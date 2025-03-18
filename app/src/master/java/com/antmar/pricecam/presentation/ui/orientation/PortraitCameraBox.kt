@@ -85,10 +85,8 @@ fun PortraitCameraBox(
                 }
             }
 
-//            PortraitDataDisplay(viewModel)
-            PortraitDataDisplayNew(viewModel)
+            PortraitDataDisplay(viewModel)
 
-//            PreviewScannedText()
         }
     }
 }

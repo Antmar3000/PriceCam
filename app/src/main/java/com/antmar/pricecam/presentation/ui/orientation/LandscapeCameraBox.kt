@@ -86,8 +86,7 @@ fun LandscapeCameraBox(
                 }
             }
 
-//            LandscapeDataDisplay(viewModel)
-            LandscapeDataDisplayNew(viewModel)
+            LandscapeDataDisplay(viewModel)
         }
     }
 }
