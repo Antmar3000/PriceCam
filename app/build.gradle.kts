@@ -1,9 +1,19 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("S:\\as\\PriceCam Code Files\\price_cam_keystore.jks")
+            storePassword = "GeForce00"
+            keyAlias = "pricecam"
+            keyPassword = "GeForce00"
+        }
+    }
     namespace = "com.antmar.pricecam"
     compileSdk = 34
 
@@ -39,6 +49,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -59,6 +70,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
 }
 
 dependencies {

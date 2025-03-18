@@ -64,13 +64,13 @@ fun PortraitDataDisplay (viewModel: MainViewModel) {
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            Column (modifier = Modifier.weight(1f),
+            Column (modifier = Modifier.weight(1.2f),
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.weight(2f))
 
-                BaseText("${priceQuantityInfo.price.toInt()}", 28, 0)
+                BaseText("${priceQuantityInfo.price.toInt()}", 26, 0)
 
                 BaseText(stringResource(R.string.price), 14, 0)
 
