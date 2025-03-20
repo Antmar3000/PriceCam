@@ -8,7 +8,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("S:\\as\\PriceCam Code Files\\price_cam_keystore.jks")
+            storeFile = file("S:\\as\\PriceCamCodeFiles\\price_cam_keystore.jks")
             storePassword = "GeForce00"
             keyAlias = "pricecam"
             keyPassword = "GeForce00"

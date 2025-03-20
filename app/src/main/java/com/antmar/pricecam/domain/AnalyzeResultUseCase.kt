@@ -16,17 +16,31 @@ class AnalyzeResultUseCase {
         var highestElement = 0.0
         var highestElementMatch = 0.0f
 
-        result.textBlocks.forEach { block ->
-            if (block.boundingBox != null) {
-                block.lines.forEach { line ->
-                    line.elements.forEach { element ->
-                        val lineHeight: Double = element.boundingBox!!.height().toDouble()
-                        if (lineHeight > highestElement && element.text.matches(Regex("\\d{2,4}"))) {
-                            highestElement =
-                                lineHeight
-                            highestElementMatch = element.text.toFloat()
+//        result.textBlocks.forEach { block ->
+//            if (block.boundingBox != null) {
+//                block.lines.forEach { line ->
+//                    line.elements.forEach { element ->
+//                        val lineHeight: Double = element.boundingBox!!.height().toDouble()
+//                        if (lineHeight > highestElement && element.text.matches(Regex("\\d{2,4}"))) {
+//                            highestElement =
+//                                lineHeight
+//                            highestElementMatch = element.text.toFloat()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        val regexPrice = "\\d{2,4}".toRegex()
+
+        result.textBlocks.forEach {block ->
+                block.lines.forEach {line ->
+                    if (line.boundingBox != null) {
+                        val lineHeight = line.boundingBox!!.height().toDouble()
+                        if (lineHeight > highestElement && regexPrice.containsMatchIn(line.text)) {
+                            highestElement = lineHeight
+                            highestElementMatch = (regexPrice.find(line.text)?.value ?: "0").toFloat()
                         }
-                    }
                 }
             }
         }
