@@ -138,11 +138,11 @@ class AnalyzeResultUseCase {
         }
 
         val weightOrVolumeDigits =
-            weightOrVolumeMatch.replace(",", ".").replace("[^0-9.]".toRegex(), "")
+            weightOrVolumeMatch.replace(",", ".").replace("[^0-9.]".toRegex(), "").toFloat()
 
 
-        return if (matchWithKilos) QuantityInfo(weightOrVolumeDigits.toFloat(), suffix)
-        else QuantityInfo(weightOrVolumeDigits.toFloat().div(1000), suffix)
+        return if (matchWithKilos) QuantityInfo(weightOrVolumeDigits, suffix)
+        else QuantityInfo(weightOrVolumeDigits.div(1000), suffix)
     }
 
     private fun uniteResults(result: Text): PriceTag {

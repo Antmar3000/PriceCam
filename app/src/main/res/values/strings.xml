@@ -4,7 +4,10 @@
     <string name="button_permission">Grant permission</string>
     <string name="price">price</string>
     <string name="quantity">quantity</string>
-    <string name="price_per_unit">price per unit</string>
+    <string name="price_per">price per</string>
     <string name="kg">kg</string>
-    <string name="liter">l</string>
+    <string name="liter_short">l</string>
+    <string name="liter">liter</string>
+    <string name="gram">g</string>
+    <string name="milliliter">ml</string>
 </resources>
