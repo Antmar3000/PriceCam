@@ -15,9 +15,9 @@ fun BaseText(text: String, size: Int, suffix : Int) {
     Text(
         text = "$text " + when(suffix) {
             0 -> ""
-            1 -> stringResource(R.string.kg)
-            2 -> stringResource(R.string.liter)
-            3 -> stringResource(R.string.liter)
+            1 -> stringResource(R.string.gram)
+            2 -> stringResource(R.string.liter_short)
+            3 -> stringResource(R.string.milliliter)
             4 -> stringResource(R.string.kg)
             else -> ""
         },

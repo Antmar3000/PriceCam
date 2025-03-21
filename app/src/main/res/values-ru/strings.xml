@@ -5,7 +5,10 @@
     <string name="button_permission">Дать разрешение</string>
     <string name="price">цена</string>
     <string name="quantity">кол-во</string>
-    <string name="price_per_unit">цена за единицу</string>
+    <string name="price_per">цена за</string>
     <string name="kg">кг</string>
-    <string name="liter">л</string>
+    <string name="liter_short">л</string>
+    <string name="liter">литр</string>
+    <string name="gram">г</string>
+    <string name="milliliter">мл</string>
 </resources>

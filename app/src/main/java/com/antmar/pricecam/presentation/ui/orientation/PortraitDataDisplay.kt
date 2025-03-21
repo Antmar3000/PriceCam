@@ -40,20 +40,28 @@ fun PortraitDataDisplay (viewModel: MainViewModel) {
             .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Column (modifier = Modifier.weight(1.8f),
+            Column (modifier = Modifier
+                .weight(1.8f)
+                .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.weight(0.3f))
 
-                BaseText("${priceQuantityInfo.quantityInfo.quantity}", 22, priceQuantityInfo.quantityInfo.suffix)
+                BaseText(when (priceQuantityInfo.quantityInfo.suffix) {
+                    0, 2, 4 -> "${priceQuantityInfo.quantityInfo.quantity}"
+                    1, 3 -> "${priceQuantityInfo.quantityInfo.quantity.times(1000).toInt()}"
+                    else -> "${priceQuantityInfo.quantityInfo.quantity}"
+                }, 22, priceQuantityInfo.quantityInfo.suffix)
 
                 BaseText(stringResource(R.string.quantity), 14, 0)
 
                 Spacer(modifier = Modifier.weight(2f))
             }
 
-            Column (modifier = Modifier.weight(0.4f),
+            Column (modifier = Modifier
+                .weight(0.4f)
+                .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -64,13 +72,15 @@ fun PortraitDataDisplay (viewModel: MainViewModel) {
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            Column (modifier = Modifier.weight(1f),
+            Column (modifier = Modifier
+                .weight(1.2f)
+                .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.weight(2f))
 
-                BaseText("${priceQuantityInfo.price.toInt()}", 28, 0)
+                BaseText("${priceQuantityInfo.price.toInt()}", 26, 0)
 
                 BaseText(stringResource(R.string.price), 14, 0)
 
@@ -78,7 +88,9 @@ fun PortraitDataDisplay (viewModel: MainViewModel) {
             }
 
             Column (
-                modifier = Modifier.weight(0.8f).fillMaxHeight(),
+                modifier = Modifier.weight(0.8f)
+                    .fillMaxHeight()
+                    .background(MaterialTheme.colorScheme.background),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -101,7 +113,33 @@ fun PortraitDataDisplay (viewModel: MainViewModel) {
                     overflow = TextOverflow.Ellipsis
                 )
 
-                BaseText(stringResource(R.string.price_per_unit), 16, 0)
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+
+                    Text(text = " ")
+
+                    Text(
+                        text = stringResource(R.string.price_per),
+                        fontSize = 16.sp,
+                        style = TextStyle(color = MaterialTheme.colorScheme.primary)
+                    )
+
+                    Text(
+                        text = when(priceQuantityInfo.quantityInfo.suffix) {
+                            0 -> "..."
+                            1 -> stringResource(R.string.kg)
+                            2 -> stringResource(R.string.liter)
+                            3 -> stringResource(R.string.liter)
+                            4 -> stringResource(R.string.kg)
+                            else -> "..."
+                        },
+                        fontSize = 16.sp,
+                        style = TextStyle(color = MaterialTheme.colorScheme.primary))
+
+                    Text(text = " ")
+                }
 
             }
         }
