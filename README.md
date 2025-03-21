@@ -18,4 +18,4 @@ After a successful scan, the app unites 2 results (price and quantity) and calcu
 - Jetpack Compose
 - MVVM
 
-### Video
+### Screenshots
