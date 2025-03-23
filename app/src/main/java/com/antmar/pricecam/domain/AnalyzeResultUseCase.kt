@@ -71,6 +71,8 @@ class AnalyzeResultUseCase {
             matchWithKilos = kilos
         }
 
+        val regex01 = "\\b\\d{1,2}[.,]\\s{1,2}\\d+\\s*[nLANl]([.,])?".toRegex()
+        val regex02 = "\\b\\d{1,2}[.,]\\s{1,2}\\d+\\s*[Kk][grT]([.,])?".toRegex()
         val regex1 = "\\d+\\s*[rfT]([.,])?\\b".toRegex()
         val regex2 = "\\d+\\s*[Trf][pP]([.,])?\\b".toRegex()
         val regex3 = "\\b\\d{1,2}([.,]\\d+)?\\s*[nLANl]([.,])?\\b".toRegex()
@@ -78,8 +80,9 @@ class AnalyzeResultUseCase {
         val regex5 = "\\d{1,2}([.,]\\d+)?\\s*[Kk][grT]([.,])?".toRegex()
         val regex6 = "\\d+\\s*[mM](/I|JI|JN)([.,])?".toRegex()
         val regex7 = "\\d{1,2}([.,]\\d+)?\\s*(/I|JI|JN)([.,])?".toRegex()
-        val regex8 = "\\d{1,2}([.,]\\d+)?\\s*[nLNl]([.,])?\\b".toRegex()
+        val regex8 = "\\b\\d{1,2}([.,]\\d+)?\\s*[nLNl]([.,])?\\b".toRegex()
         val regex9 = "[0-24-9]{1,2}([.,]\\d+)\\s*A([.,])?\\b".toRegex()
+
 
 
         run loop@{
@@ -88,6 +91,15 @@ class AnalyzeResultUseCase {
                 if (block.boundingBox != null && !foundFirstMatch)
                     block.lines.forEach { line ->
                         when (line.text) {
+                            in regex01 -> {
+                                findRegex(regex01, line.text, 2, true)
+                                return@loop
+                            }
+
+                            in regex02 -> {
+                                findRegex(regex02, line.text, 4, true)
+                            }
+
                             in regex1 -> {
                                 findRegex(regex1, line.text, 1, false)
                                 return@loop
@@ -132,6 +144,7 @@ class AnalyzeResultUseCase {
                                 findRegex(regex9, line.text, 2, true)
                                 return@loop
                             }
+
                         }
                     }
             }
