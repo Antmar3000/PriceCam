@@ -17,5 +17,3 @@ After a successful scan, the app unites 2 results (price and quantity) and calcu
 - CameraX
 - Jetpack Compose
 - MVVM
-
-### Video
