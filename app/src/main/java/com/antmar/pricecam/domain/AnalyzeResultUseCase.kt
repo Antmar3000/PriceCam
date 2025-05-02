@@ -63,11 +63,19 @@ class AnalyzeResultUseCase {
         4 = kilogram
          */
         var suffix = 0
+        var suffixes = QuantitySuffixes.NO_SUFFIX
 
         fun findRegex (regex : Regex, text: CharSequence, suff : Int, kilos : Boolean) {
             weightOrVolumeMatch = regex.find(text)?.value ?: "0"
             foundFirstMatch = true
             suffix = suff
+            matchWithKilos = kilos
+        }
+
+        fun findRegexTest (regex: Regex, text: CharSequence, suffix : QuantitySuffixes, kilos : Boolean) {
+            weightOrVolumeMatch = regex.find(text)?.value ?: "0"
+            foundFirstMatch = true
+            suffixes = suffix
             matchWithKilos = kilos
         }
 
@@ -82,7 +90,6 @@ class AnalyzeResultUseCase {
         val regex7 = "\\d{1,2}([.,]\\d+)?\\s*(/I|JI|JN)([.,])?".toRegex()
         val regex8 = "\\b\\d{1,2}([.,]\\d+)?\\s*[nLNl]([.,])?\\b".toRegex()
         val regex9 = "[0-24-9]{1,2}([.,]\\d+)\\s*A([.,])?\\b".toRegex()
-
 
 
         run loop@{
@@ -174,4 +181,12 @@ class AnalyzeResultUseCase {
             result.text
         )
     }
+}
+
+enum class QuantitySuffixes {
+    GRAM,
+    LITER,
+    MILLILITER,
+    KILOGRAM,
+    NO_SUFFIX
 }
